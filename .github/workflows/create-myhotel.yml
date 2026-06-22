@@ -1,0 +1,16 @@
+name: Create MyHotel repo
+
+on:
+  workflow_dispatch:
+
+jobs:
+  create-myhotel:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create MyHotel repository
+        run: |
+          RESP=$(curl -s -X POST https://api.github.com/user/repos \
+            -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
+            -H "Accept: application/vnd.github+json" \
+            -d '{"name":"MyHotel","description":"MyHotel repository","auto_init":true,"private":false}')
+          echo "$RESP" | python3 -c "import sys,json; r=json.load(sys.stdin); print(r.get('html_url') or r.get('message'))"
